@@ -89,4 +89,10 @@ public class Hotel {
                 .filter(r -> r.getRoomNumber() == roomNumber)
                 .noneMatch(r -> DateUtils.overlaps(from, to, r.getFrom(), r.getTo()));
     }
+    public Optional<Room> findUrgent(int beds, LocalDate from, LocalDate to) {
+        Optional<Room> direct = find(beds, from, to);
+        if (direct.isPresent()) return direct;
+
+        return direct;
+    }
 }
