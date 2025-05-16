@@ -11,6 +11,11 @@ public class FindCommand implements Command {
 
     @Override
     public void execute(String[] args) {
+        if (args.length < 4) {
+            System.out.println("Usage: find <beds> <from> <to>");
+            return;
+        }
+
         int beds = Integer.parseInt(args[1]);
         LocalDate from = DateUtils.parse(args[2]);
         LocalDate to = DateUtils.parse(args[3]);
@@ -21,3 +26,4 @@ public class FindCommand implements Command {
         );
     }
 }
+

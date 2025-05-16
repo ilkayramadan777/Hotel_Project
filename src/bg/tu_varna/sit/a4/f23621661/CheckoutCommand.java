@@ -9,7 +9,13 @@ public class CheckoutCommand implements Command {
 
     @Override
     public void execute(String[] args) {
+        if (args.length < 2) {
+            System.out.println("Usage: checkout <room>");
+            return;
+        }
+
         int room = Integer.parseInt(args[1]);
         hotel.checkout(room);
     }
 }
+

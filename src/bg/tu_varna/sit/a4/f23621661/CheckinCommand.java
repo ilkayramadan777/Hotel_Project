@@ -11,6 +11,11 @@ public class CheckinCommand implements Command {
 
     @Override
     public void execute(String[] args) {
+        if (args.length < 5) {
+            System.out.println("Usage: checkin <room> <from> <to> <note> [<guests>]");
+            return;
+        }
+
         int room = Integer.parseInt(args[1]);
         LocalDate from = DateUtils.parse(args[2]);
         LocalDate to = DateUtils.parse(args[3]);
@@ -19,3 +24,4 @@ public class CheckinCommand implements Command {
         hotel.checkin(room, from, to, note, guests);
     }
 }
+

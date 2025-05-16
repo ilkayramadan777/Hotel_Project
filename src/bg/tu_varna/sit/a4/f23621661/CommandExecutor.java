@@ -30,5 +30,22 @@ public class CommandExecutor {
 
     }
 
+    public void execute(String input) {
+        String[] args = input.split("\s+");
+        String cmd = args[0].toLowerCase();
+        Command action = commandMap.get(cmd);
+
+        if (action != null) {
+            try {
+                action.execute(args);
+            } catch (Exception e) {
+                System.out.println("Error: " + e.getMessage());
+            }
+        } else {
+            System.out.println("Unknown command. Type 'help' for available commands.");
+        }
+    }
 }
+
+
 
