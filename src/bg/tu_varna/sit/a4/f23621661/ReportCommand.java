@@ -11,6 +11,11 @@ public class ReportCommand implements Command {
 
     @Override
     public void execute(String[] args) {
+        if (args.length < 3) {
+            System.out.println("Usage: report <from> <to>");
+            return;
+        }
+
         LocalDate from = DateUtils.parse(args[1]);
         LocalDate to = DateUtils.parse(args[2]);
         hotel.report(from, to);

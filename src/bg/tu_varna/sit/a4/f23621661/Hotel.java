@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-
 public class Hotel {
     private final List<Room> rooms = new ArrayList<>();
     private final List<Reservation> reservations = new ArrayList<>();
@@ -43,15 +42,18 @@ public class Hotel {
     }
 
     public void availability(LocalDate date) {
-        List<Integer> occupied = reservations.stream()
-                .filter(r -> !r.isUnavailable() && !date.isBefore(r.getFrom()) && !date.isAfter(r.getTo()))
+        List<Integer> unavailableRooms = reservations.stream()
+                .filter(r -> DateUtils.overlaps(date, date, r.getFrom(), r.getTo()))
                 .map(Reservation::getRoomNumber)
                 .collect(Collectors.toList());
 
-        rooms.stream()
-                .filter(room -> !occupied.contains(room.getNumber()))
-                .forEach(System.out::println);
+        for (Room room : rooms) {
+            if (!unavailableRooms.contains(room.getNumber())) {
+                System.out.println(room);
+            }
+        }
     }
+
 
     public void report(LocalDate from, LocalDate to) {
         System.out.println("Usage report from " + from + " to " + to + ":");
@@ -90,9 +92,47 @@ public class Hotel {
                 .noneMatch(r -> DateUtils.overlaps(from, to, r.getFrom(), r.getTo()));
     }
     public Optional<Room> findUrgent(int beds, LocalDate from, LocalDate to) {
+
         Optional<Room> direct = find(beds, from, to);
         if (direct.isPresent()) return direct;
 
-        return direct;
+
+        for (Room targetRoom : rooms) {
+            if (targetRoom.getBeds() < beds) continue;
+
+            List<Reservation> conflicts = reservations.stream()
+                    .filter(r -> r.getRoomNumber() == targetRoom.getNumber())
+                    .filter(r -> !r.isUnavailable() && DateUtils.overlaps(from, to, r.getFrom(), r.getTo()))
+                    .toList();
+
+            if (conflicts.size() > 2) continue;
+
+            boolean canMoveAll = true;
+
+            for (Reservation r : conflicts) {
+                boolean moved = rooms.stream()
+                        .filter(alt -> alt.getNumber() != r.getRoomNumber() && alt.getBeds() >= r.getGuests())
+                        .filter(alt -> isRoomAvailable(alt.getNumber(), r.getFrom(), r.getTo()))
+                        .findFirst()
+                        .map(newRoom -> {
+                            reservations.add(new Reservation(newRoom.getNumber(), r.getFrom(), r.getTo(), r.getNote(), r.getGuests(), false));
+                            return true;
+                        })
+                        .orElse(false);
+
+                if (!moved) {
+                    canMoveAll = false;
+                    break;
+                }
+            }
+
+            if (canMoveAll) {
+                reservations.removeAll(conflicts);
+                return Optional.of(targetRoom);
+            }
+        }
+
+        return Optional.empty();
     }
+
 }
