@@ -10,7 +10,7 @@ public class CheckoutCommand implements Command {
     @Override
     public void execute(String[] args) {
         if (args.length < 2) {
-            System.out.println("Usage: checkout <room>");
+            System.out.println("Въведете: checkout <стая>");
             return;
         }
 

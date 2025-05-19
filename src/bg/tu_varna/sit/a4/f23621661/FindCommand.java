@@ -12,7 +12,7 @@ public class FindCommand implements Command {
     @Override
     public void execute(String[] args) {
         if (args.length < 4) {
-            System.out.println("Usage: find <beds> <from> <to>");
+            System.out.println("Въведете: find <легла> <от> <до>");
             return;
         }
 
@@ -21,8 +21,8 @@ public class FindCommand implements Command {
         LocalDate to = DateUtils.parse(args[3]);
 
         hotel.find(beds, from, to).ifPresentOrElse(
-                r -> System.out.println("Available room: " + r),
-                () -> System.out.println("No available room found.")
+                r -> System.out.println("Свободни стаи: " + r),
+                () -> System.out.println("Няма свободни стаи.")
         );
     }
 }

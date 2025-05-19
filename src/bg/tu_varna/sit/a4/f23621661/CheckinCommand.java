@@ -6,13 +6,14 @@ public class CheckinCommand implements Command {
     private Hotel hotel;
 
     public CheckinCommand(Hotel hotel) {
+
         this.hotel = hotel;
     }
 
     @Override
     public void execute(String[] args) {
         if (args.length < 5) {
-            System.out.println("Usage: checkin <room> <from> <to> <note> [<guests>]");
+            System.out.println("Въведете: checkin <стая> <от> <до> <бележка> [<гости>]");
             return;
         }
 
