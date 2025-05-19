@@ -7,9 +7,11 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+
 public class Hotel {
     private final List<Room> rooms = new ArrayList<>();
     private final List<Reservation> reservations = new ArrayList<>();
+
 
     public void addRoom(Room room) {
         rooms.add(room);
@@ -23,32 +25,37 @@ public class Hotel {
         return reservations;
     }
 
+
     public void checkin(int roomNumber, LocalDate from, LocalDate to, String note, int guests) {
         if (isRoomAvailable(roomNumber, from, to)) {
             reservations.add(new Reservation(roomNumber, from, to, note, guests, false));
-            System.out.println("Room " + roomNumber + " checked in successfully.");
+            System.out.println("Стая " + roomNumber + " е успешно резервирана.");
         } else {
-            System.out.println("Room " + roomNumber + " is not available for the selected period.");
+            System.out.println("Стая " + roomNumber + " не е свободна за посочения период.");
         }
     }
+
 
     public void checkout(int roomNumber) {
-        boolean removed = reservations.removeIf(r -> r.getRoomNumber() == roomNumber && !r.isUnavailable());
+        boolean removed = reservations.removeIf(
+                reservation -> reservation.getRoomNumber() == roomNumber && !reservation.isUnavailable()
+        );
         if (removed) {
-            System.out.println("Room " + roomNumber + " successfully checked out.");
+            System.out.println("Стая " + roomNumber + " беше успешно освободена.");
         } else {
-            System.out.println("Room " + roomNumber + " is not currently occupied.");
+            System.out.println("Стая " + roomNumber + " не е заета.");
         }
     }
 
+
     public void availability(LocalDate date) {
-        List<Integer> unavailableRooms = reservations.stream()
-                .filter(r -> DateUtils.overlaps(date, date, r.getFrom(), r.getTo()))
+        List<Integer> occupiedRooms = reservations.stream()
+                .filter(res -> DateUtils.overlaps(date, date, res.getFrom(), res.getTo()))
                 .map(Reservation::getRoomNumber)
                 .collect(Collectors.toList());
 
         for (Room room : rooms) {
-            if (!unavailableRooms.contains(room.getNumber())) {
+            if (!occupiedRooms.contains(room.getNumber())) {
                 System.out.println(room);
             }
         }
@@ -56,83 +63,91 @@ public class Hotel {
 
 
     public void report(LocalDate from, LocalDate to) {
-        System.out.println("Usage report from " + from + " to " + to + ":");
+        System.out.println("Справка за периода от " + from + " до " + to + ":");
         for (Room room : rooms) {
-            int daysUsed = 0;
-            for (Reservation r : reservations) {
-                if (r.getRoomNumber() == room.getNumber() && !r.isUnavailable()) {
-                    LocalDate overlapStart = from.isAfter(r.getFrom()) ? from : r.getFrom();
-                    LocalDate overlapEnd = to.isBefore(r.getTo()) ? to : r.getTo();
+            int usedDays = 0;
+
+            for (Reservation res : reservations) {
+                if (res.getRoomNumber() == room.getNumber() && !res.isUnavailable()) {
+                    LocalDate overlapStart = from.isAfter(res.getFrom()) ? from : res.getFrom();
+                    LocalDate overlapEnd = to.isBefore(res.getTo()) ? to : res.getTo();
+
                     if (!overlapStart.isAfter(overlapEnd)) {
-                        daysUsed += overlapEnd.toEpochDay() - overlapStart.toEpochDay() + 1;
+                        usedDays += overlapEnd.toEpochDay() - overlapStart.toEpochDay() + 1;
                     }
                 }
             }
-            if (daysUsed > 0) {
-                System.out.println("Room " + room.getNumber() + ": " + daysUsed + " days used");
+
+            if (usedDays > 0) {
+                System.out.println("Стая " + room.getNumber() + ": " + usedDays + " дни.");
             }
         }
     }
 
+
     public void unavailable(int roomNumber, LocalDate from, LocalDate to, String note) {
         reservations.add(new Reservation(roomNumber, from, to, note, 0, true));
-        System.out.println("Room " + roomNumber + " marked as unavailable.");
+        System.out.println("Стая " + roomNumber + " е маркирана като недостъпна.");
     }
+
 
     public Optional<Room> find(int beds, LocalDate from, LocalDate to) {
         return rooms.stream()
-                .filter(r -> r.getBeds() >= beds && isRoomAvailable(r.getNumber(), from, to))
+                .filter(room -> room.getBeds() >= beds && isRoomAvailable(room.getNumber(), from, to))
                 .sorted((r1, r2) -> Integer.compare(r1.getBeds(), r2.getBeds()))
                 .findFirst();
     }
 
-    private boolean isRoomAvailable(int roomNumber, LocalDate from, LocalDate to) {
-        return reservations.stream()
-                .filter(r -> r.getRoomNumber() == roomNumber)
-                .noneMatch(r -> DateUtils.overlaps(from, to, r.getFrom(), r.getTo()));
-    }
+
     public Optional<Room> findUrgent(int beds, LocalDate from, LocalDate to) {
+        Optional<Room> directMatch = find(beds, from, to);
+        if (directMatch.isPresent()) return directMatch;
 
-        Optional<Room> direct = find(beds, from, to);
-        if (direct.isPresent()) return direct;
+        for (Room candidate : rooms) {
+            if (candidate.getBeds() < beds) continue;
 
-
-        for (Room targetRoom : rooms) {
-            if (targetRoom.getBeds() < beds) continue;
-
-            List<Reservation> conflicts = reservations.stream()
-                    .filter(r -> r.getRoomNumber() == targetRoom.getNumber())
-                    .filter(r -> !r.isUnavailable() && DateUtils.overlaps(from, to, r.getFrom(), r.getTo()))
+            List<Reservation> conflicting = reservations.stream()
+                    .filter(res -> res.getRoomNumber() == candidate.getNumber())
+                    .filter(res -> !res.isUnavailable() && DateUtils.overlaps(from, to, res.getFrom(), res.getTo()))
                     .toList();
 
-            if (conflicts.size() > 2) continue;
+            if (conflicting.size() > 2) continue;
 
-            boolean canMoveAll = true;
+            boolean allMoved = true;
 
-            for (Reservation r : conflicts) {
-                boolean moved = rooms.stream()
-                        .filter(alt -> alt.getNumber() != r.getRoomNumber() && alt.getBeds() >= r.getGuests())
-                        .filter(alt -> isRoomAvailable(alt.getNumber(), r.getFrom(), r.getTo()))
-                        .findFirst()
-                        .map(newRoom -> {
-                            reservations.add(new Reservation(newRoom.getNumber(), r.getFrom(), r.getTo(), r.getNote(), r.getGuests(), false));
-                            return true;
-                        })
-                        .orElse(false);
+            for (Reservation res : conflicting) {
+                Optional<Room> alternative = rooms.stream()
+                        .filter(alt -> alt.getNumber() != res.getRoomNumber() && alt.getBeds() >= res.getGuests())
+                        .filter(alt -> isRoomAvailable(alt.getNumber(), res.getFrom(), res.getTo()))
+                        .findFirst();
 
-                if (!moved) {
-                    canMoveAll = false;
+                if (alternative.isPresent()) {
+                    reservations.add(new Reservation(
+                            alternative.get().getNumber(),
+                            res.getFrom(), res.getTo(),
+                            res.getNote(),
+                            res.getGuests(),
+                            false
+                    ));
+                } else {
+                    allMoved = false;
                     break;
                 }
             }
 
-            if (canMoveAll) {
-                reservations.removeAll(conflicts);
-                return Optional.of(targetRoom);
+            if (allMoved) {
+                reservations.removeAll(conflicting);
+                return Optional.of(candidate);
             }
         }
 
         return Optional.empty();
     }
 
+
+    private boolean isRoomAvailable(int roomNumber, LocalDate from, LocalDate to) {
+        return reservations.stream()
+                .filter(r -> r.getRoomNumber() == roomNumber)
+                .noneMatch(r -> DateUtils.overlaps(from, to, r.getFrom(), r.getTo()));
+    }
 }
