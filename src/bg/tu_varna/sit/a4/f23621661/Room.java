@@ -19,7 +19,7 @@ public class Room {
 
     @Override
     public String toString() {
-        return "Room " + number + " (" + beds + " beds)";
+        return "Стая " + number + " (" + beds + " легла)";
     }
 }
 

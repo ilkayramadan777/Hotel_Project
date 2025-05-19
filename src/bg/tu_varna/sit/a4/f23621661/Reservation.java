@@ -46,8 +46,8 @@ public class Reservation {
 
     @Override
     public String toString() {
-        return (isUnavailable ? "[Unavailable]" : "[Reservation]") +
-                " Room " + roomNumber + ", From: " + from + ", To: " + to +
-                ", Guests: " + guests + ", Note: " + note;
+        return (isUnavailable ? "[Недостъпна]" : "[Резервация]") +
+                " Стая " + roomNumber + ", от: " + from + ", до: " + to +
+                ", Гости: " + guests + ", Бележка: " + note;
     }
 }

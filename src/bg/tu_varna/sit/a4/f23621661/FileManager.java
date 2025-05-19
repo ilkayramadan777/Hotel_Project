@@ -47,12 +47,12 @@ public class FileManager {
             }
 
             currentFile = filename;
-            System.out.println("File '" + filename + "' opened successfully.");
+            System.out.println("Файл '" + filename + "' е отворен успешно.");
         }
     }
 
     public void save(Hotel hotel) throws IOException {
-        if (currentFile == null) throw new IllegalStateException("No file opened. Use saveas <file> first.");
+        if (currentFile == null) throw new IllegalStateException("Няма отворен файл. Първо използвайте saveas <файл>.");
         saveAs(hotel, currentFile);
     }
 
@@ -74,7 +74,7 @@ public class FileManager {
             }
 
             currentFile = filename;
-            System.out.println("File saved to '" + filename + "'");
+            System.out.println("Файлът е запазен в '" + filename + "'");
         }
     }
 
@@ -82,6 +82,6 @@ public class FileManager {
         hotel.getRooms().clear();
         hotel.getReservations().clear();
         currentFile = null;
-        System.out.println("Hotel data closed.");
+        System.out.println("Данните за хотела са затворени.");
     }
 }

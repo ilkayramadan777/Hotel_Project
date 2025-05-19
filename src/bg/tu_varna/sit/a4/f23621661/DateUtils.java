@@ -11,7 +11,7 @@ public class DateUtils {
         try {
             return LocalDate.parse(dateStr, FORMATTER);
         } catch (DateTimeParseException e) {
-            throw new IllegalArgumentException("Invalid date format. Use yyyy-MM-dd.");
+            throw new IllegalArgumentException("Грешен/Невалиден формат на дата. Моля използвайте този формат: yyyy-MM-dd.");
         }
     }
 
