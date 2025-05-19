@@ -16,6 +16,7 @@ public class DateUtils {
     }
 
     public static String format(LocalDate date) {
+
         return date.format(FORMATTER);
     }
 

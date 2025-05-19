@@ -6,6 +6,7 @@ public class FindCommand implements Command {
     private Hotel hotel;
 
     public FindCommand(Hotel hotel) {
+
         this.hotel = hotel;
     }
 

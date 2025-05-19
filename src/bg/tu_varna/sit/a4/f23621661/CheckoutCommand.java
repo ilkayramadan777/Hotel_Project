@@ -4,6 +4,7 @@ public class CheckoutCommand implements Command {
     private Hotel hotel;
 
     public CheckoutCommand(Hotel hotel) {
+
         this.hotel = hotel;
     }
 

@@ -6,6 +6,7 @@ public class AvailabilityCommand implements Command {
     private Hotel hotel;
 
     public AvailabilityCommand(Hotel hotel) {
+
         this.hotel = hotel;
     }
 

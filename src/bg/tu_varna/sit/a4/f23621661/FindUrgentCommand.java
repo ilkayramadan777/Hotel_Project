@@ -6,13 +6,14 @@ public class FindUrgentCommand implements Command {
     private Hotel hotel;
 
     public FindUrgentCommand(Hotel hotel) {
+
         this.hotel = hotel;
     }
 
     @Override
     public void execute(String[] args) {
         if (args.length < 4) {
-            System.out.println("Usage: find! <beds> <from> <to>");
+            System.out.println("Въведете: find! <легла> <от> <до>");
             return;
         }
 
@@ -21,8 +22,8 @@ public class FindUrgentCommand implements Command {
         LocalDate to = DateUtils.parse(args[3]);
 
         hotel.findUrgent(beds, from, to).ifPresentOrElse(
-                r -> System.out.println("Urgently found room (with rearrangement): " + r),
-                () -> System.out.println("No room could be found, even with rearrangement.")
+                r -> System.out.println("Спешно намерена стая (с пренареждане): " + r),
+                () -> System.out.println("Няма намерена стая с пренареждане.")
         );
     }
 }
