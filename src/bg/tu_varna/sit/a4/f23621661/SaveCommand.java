@@ -16,7 +16,7 @@ public class SaveCommand implements Command {
         try {
             fileManager.save(hotel);
         } catch (IOException e) {
-            System.out.println("Error while saving file: " + e.getMessage());
+            System.out.println("Грешка при запазване на файла: " + e.getMessage());
         }
     }
 }

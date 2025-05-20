@@ -11,7 +11,7 @@ public class HelpCommand implements Command {
 
     @Override
     public void execute(String[] args) {
-        System.out.println("Supported commands:");
+        System.out.println("Команди,които може да използвате:");
         commandMap.keySet().forEach(System.out::println);
         System.out.println("exit");
     }

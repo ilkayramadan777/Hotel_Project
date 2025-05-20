@@ -14,13 +14,13 @@ public class SaveAsCommand implements Command {
     @Override
     public void execute(String[] args) {
         if (args.length < 2) {
-            System.out.println("Usage: saveas <file>");
+            System.out.println("Въведете: saveas <файл>");
             return;
         }
         try {
             fileManager.saveAs(hotel, args[1]);
         } catch (IOException e) {
-            System.out.println("Error while saving as: " + e.getMessage());
+            System.out.println("Грешка при запазване с ново име: " + e.getMessage());
         }
     }
 }

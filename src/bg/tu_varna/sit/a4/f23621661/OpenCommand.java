@@ -14,13 +14,13 @@ public class OpenCommand implements Command {
     @Override
     public void execute(String[] args) {
         if (args.length < 2) {
-            System.out.println("Usage: open <file>");
+            System.out.println("Въведете: open <файл>");
             return;
         }
         try {
             fileManager.open(hotel, args[1]);
         } catch (IOException e) {
-            System.out.println("Error while opening file: " + e.getMessage());
+            System.out.println("Грешка при отваряне на файл: " + e.getMessage());
         }
     }
 }

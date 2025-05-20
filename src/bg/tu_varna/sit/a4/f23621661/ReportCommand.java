@@ -12,7 +12,7 @@ public class ReportCommand implements Command {
     @Override
     public void execute(String[] args) {
         if (args.length < 3) {
-            System.out.println("Usage: report <from> <to>");
+            System.out.println("Въведете: report <от> <до>");
             return;
         }
 

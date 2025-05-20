@@ -12,7 +12,7 @@ public class UnavailableCommand implements Command {
     @Override
     public void execute(String[] args) {
         if (args.length < 5) {
-            System.out.println("Usage: unavailable <room> <from> <to> <note>");
+            System.out.println("Въведете: unavailable <стая> <от> <до> <бележка>");
             return;
         }
 
