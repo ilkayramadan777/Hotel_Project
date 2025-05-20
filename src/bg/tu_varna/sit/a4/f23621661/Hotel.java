@@ -135,4 +135,17 @@ public class Hotel {
         return Optional.empty();
     }
 
+
+    public boolean roomExists(int roomNumber) {
+        return rooms.stream().anyMatch(r -> r.getNumber() == roomNumber);
+    }
+
+    public int getRoomBeds(int roomNumber) {
+        return rooms.stream()
+                .filter(r -> r.getNumber() == roomNumber)
+                .map(Room::getBeds)
+                .findFirst()
+                .orElse(0);
+    }
+
 }
