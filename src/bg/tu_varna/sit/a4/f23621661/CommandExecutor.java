@@ -5,23 +5,36 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Отговаря за регистриране и изпълнение на команди чрез HashMap.
- */
-/**
- * Клас за регистриране и изпълнение на команди чрез HashMap.
+ * Класът {@code CommandExecutor} отговаря за регистриране и изпълнение на команди чрез {@code HashMap}.
+ * Реализира централизиран механизъм за обработка на всички потребителски команди чрез шаблона Command.
  */
 public class CommandExecutor {
+
+    /**
+     * Инстанция на {@code Hotel}, използвана от всички команди.
+     */
     private final Hotel hotel = new Hotel();
+
+    /**
+     * Мениджър за работа с файлове.
+     */
     private final FileManager fileManager = new FileManager();
+
+    /**
+     * Хеш-таблица, която съхранява командите по име.
+     */
     private final Map<String, Command> commandMap = new HashMap<>();
 
     /**
-     * Конструктор – регистрира всички команди.
+     * Конструктор, който инициализира и регистрира всички налични команди.
      */
     public CommandExecutor() {
         registerCommands();
     }
 
+    /**
+     * Регистрира всички поддържани команди в {@code commandMap}.
+     */
     private void registerCommands() {
         commandMap.put("open", new OpenCommand(hotel, fileManager));
         commandMap.put("close", new CloseCommand(hotel, fileManager));
@@ -36,15 +49,17 @@ public class CommandExecutor {
         commandMap.put("unavailable", new UnavailableCommand(hotel));
         commandMap.put("help", new HelpCommand(commandMap));
         commandMap.put("exit", new ExitCommand());
-
     }
 
     /**
-     * Изпълнява подадената команда, ако съществува.
-     * @param input потребителски вход
+     * Изпълнява команда въз основа на потребителски вход.
+     * Разделя входния текст по интервали и извиква съответната команда, ако е регистрирана.
+     * В противен случай показва съобщение за грешка.
+     *
+     * @param input входен низ, съдържащ името на командата и аргументи
      */
     public void execute(String input) {
-        String[] args = input.split("\s+");
+        String[] args = input.split("\\s+");
         String cmd = args[0].toLowerCase();
         Command action = commandMap.get(cmd);
 
@@ -59,5 +74,3 @@ public class CommandExecutor {
         }
     }
 }
-
-

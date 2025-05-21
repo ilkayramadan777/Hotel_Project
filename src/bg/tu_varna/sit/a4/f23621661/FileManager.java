@@ -3,9 +3,24 @@ package bg.tu_varna.sit.a4.f23621661;
 import java.io.*;
 import java.time.LocalDate;
 
+/**
+ * Клас {@code FileManager} отговаря за зареждане, запазване и затваряне на данните на хотел
+ * от/във текстов файл. Използва се за сериализация на стаи и резервации.
+ */
 public class FileManager {
+
+    /**
+     * Името на текущо заредения файл.
+     */
     private String currentFile;
 
+    /**
+     * Зарежда данни от подаден файл и инициализира хотелските стаи и резервации.
+     *
+     * @param hotel    хотелският обект, в който се зареждат данните
+     * @param filename името на файла за четене
+     * @throws IOException ако файлът не може да бъде прочетен
+     */
     public void open(Hotel hotel, String filename) throws IOException {
         hotel.getRooms().clear();
         hotel.getReservations().clear();
@@ -51,11 +66,26 @@ public class FileManager {
         }
     }
 
+    /**
+     * Запазва хотелските данни във вече отворения файл.
+     *
+     * @param hotel обектът {@code Hotel}, чиито данни се записват
+     * @throws IOException               при грешка при запис
+     * @throws IllegalStateException    ако няма отворен файл
+     */
     public void save(Hotel hotel) throws IOException {
-        if (currentFile == null) throw new IllegalStateException("Няма отворен файл. Първо използвайте saveas <файл>.");
+        if (currentFile == null)
+            throw new IllegalStateException("Няма отворен файл. Първо използвайте saveas <файл>.");
         saveAs(hotel, currentFile);
     }
 
+    /**
+     * Запазва хотелските данни в нов файл.
+     *
+     * @param hotel    обектът {@code Hotel}, чиито данни се записват
+     * @param filename име на файла за запис
+     * @throws IOException при грешка при запис
+     */
     public void saveAs(Hotel hotel, String filename) throws IOException {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(filename))) {
             writer.write("ROOMS\n");
@@ -78,6 +108,11 @@ public class FileManager {
         }
     }
 
+    /**
+     * Затваря текущо заредените данни и нулира текущия файл.
+     *
+     * @param hotel обектът {@code Hotel}, чиито данни се изчистват
+     */
     public void close(Hotel hotel) {
         hotel.getRooms().clear();
         hotel.getReservations().clear();
