@@ -4,11 +4,20 @@ import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Отговаря за регистриране и изпълнение на команди чрез HashMap.
+ */
+/**
+ * Клас за регистриране и изпълнение на команди чрез HashMap.
+ */
 public class CommandExecutor {
     private final Hotel hotel = new Hotel();
     private final FileManager fileManager = new FileManager();
     private final Map<String, Command> commandMap = new HashMap<>();
 
+    /**
+     * Конструктор – регистрира всички команди.
+     */
     public CommandExecutor() {
         registerCommands();
     }
@@ -30,6 +39,10 @@ public class CommandExecutor {
 
     }
 
+    /**
+     * Изпълнява подадената команда, ако съществува.
+     * @param input потребителски вход
+     */
     public void execute(String input) {
         String[] args = input.split("\s+");
         String cmd = args[0].toLowerCase();

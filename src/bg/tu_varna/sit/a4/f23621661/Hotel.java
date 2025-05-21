@@ -7,22 +7,46 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+/**
+ * Клас, представящ хотел с налични стаи и резервации.
+ * Управлява действия като настаняване, освобождаване, справки и търсене на стаи.
+ */
 public class Hotel {
     private final List<Room> rooms = new ArrayList<>();
     private final List<Reservation> reservations = new ArrayList<>();
 
+    /**
+     * Добавя нова стая към хотела.
+     * @param room обект от тип Room
+     */
     public void addRoom(Room room) {
         rooms.add(room);
     }
 
+    /**
+     * Връща списък с всички стаи.
+     * @return списък със стаи
+     */
     public List<Room> getRooms() {
         return rooms;
     }
 
+    /**
+     * Връща списък с всички резервации.
+     * @return списък с резервации
+     */
     public List<Reservation> getReservations() {
         return reservations;
     }
 
+    /**
+     * Настанява гости в определена стая за даден период.
+     * @param roomNumber номер на стаята
+     * @param from начална дата на престоя
+     * @param to крайна дата на престоя
+     * @param note бележка за престоя
+     * @param guests брой гости
+     */
     public void checkin(int roomNumber, LocalDate from, LocalDate to, String note, int guests) {
         if (isRoomAvailable(roomNumber, from, to)) {
             reservations.add(new Reservation(roomNumber, from, to, note, guests, false));
@@ -32,6 +56,10 @@ public class Hotel {
         }
     }
 
+    /**
+     * Освобождава стая с дадения номер.
+     * @param roomNumber номер на стаята
+     */
     public void checkout(int roomNumber) {
         boolean removed = reservations.removeIf(r -> r.getRoomNumber() == roomNumber && !r.isUnavailable());
         if (removed) {
@@ -41,6 +69,10 @@ public class Hotel {
         }
     }
 
+    /**
+     * Извежда списък със свободните стаи за дадена дата.
+     * @param date дата за проверка
+     */
     public void availability(LocalDate date) {
         List<Integer> unavailableRooms = reservations.stream()
                 .filter(r -> DateUtils.overlaps(date, date, r.getFrom(), r.getTo()))
@@ -55,6 +87,11 @@ public class Hotel {
     }
 
 
+    /**
+     * Извежда справка за използване на стаите в даден период.
+     * @param from начална дата
+     * @param to крайна дата
+     */
     public void report(LocalDate from, LocalDate to) {
         System.out.println("Справка за периода от " + from + " до " + to + ":");
         for (Room room : rooms) {
@@ -74,11 +111,25 @@ public class Hotel {
         }
     }
 
+    /**
+     * Маркира стая като временно недостъпна.
+     * @param roomNumber номер на стаята
+     * @param from начална дата на недостъпност
+     * @param to крайна дата
+     * @param note бележка
+     */
     public void unavailable(int roomNumber, LocalDate from, LocalDate to, String note) {
         reservations.add(new Reservation(roomNumber, from, to, note, 0, true));
         System.out.println("Стая " + roomNumber + "е временно недостъпна");
     }
 
+    /**
+     * Намира свободна стая с поне определен брой легла.
+     * @param beds минимален брой легла
+     * @param from начална дата
+     * @param to крайна дата
+     * @return стая, ако има налична
+     */
     public Optional<Room> find(int beds, LocalDate from, LocalDate to) {
         return rooms.stream()
                 .filter(r -> r.getBeds() >= beds && isRoomAvailable(r.getNumber(), from, to))
@@ -91,6 +142,13 @@ public class Hotel {
                 .filter(r -> r.getRoomNumber() == roomNumber)
                 .noneMatch(r -> DateUtils.overlaps(from, to, r.getFrom(), r.getTo()));
     }
+    /**
+     * Извършва спешно намиране на стая чрез пренареждане на до две стаи.
+     * @param beds минимален брой легла
+     * @param from начална дата
+     * @param to крайна дата
+     * @return стая, ако е възможно пренареждане
+     */
     public Optional<Room> findUrgent(int beds, LocalDate from, LocalDate to) {
 
         Optional<Room> direct = find(beds, from, to);
@@ -136,10 +194,20 @@ public class Hotel {
     }
 
 
+    /**
+     * Проверява дали съществува стая с дадения номер.
+     * @param roomNumber номер на стаята
+     * @return true ако стаята съществува
+     */
     public boolean roomExists(int roomNumber) {
         return rooms.stream().anyMatch(r -> r.getNumber() == roomNumber);
     }
 
+    /**
+     * Връща броя на леглата в дадена стая.
+     * @param roomNumber номер на стаята
+     * @return брой легла
+     */
     public int getRoomBeds(int roomNumber) {
         return rooms.stream()
                 .filter(r -> r.getNumber() == roomNumber)
