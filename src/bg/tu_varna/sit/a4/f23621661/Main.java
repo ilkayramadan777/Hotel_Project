@@ -3,21 +3,23 @@ package bg.tu_varna.sit.a4.f23621661;
 import java.util.Scanner;
 
 /**
- * Основен входен клас на програмата – стартира конзолния интерфейс.
- */
-/**
- * Главен клас на приложението. Стартира интерфейса за команди.
+ * Главен клас на приложението. Стартира конзолния интерфейс и поддържа
+ * непрекъснато въвеждане на команди до извикване на "exit".
  */
 public class Main {
+
     /**
      * Стартира приложението.
-     * @param args аргументи от командния ред
+     *
+     * @param args аргументи от командния ред (не се използват)
      */
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         CommandExecutor executor = new CommandExecutor();
 
-        System.out.println("Системата за управление на хотел е стартирана успешно. Въведете 'help' за да се изведата командите, които може да използвате.");
+        System.out.println("Системата за управление на хотел е стартирана успешно.");
+        System.out.println("Въведете 'help' за списък с достъпни команди.");
+
         while (true) {
             System.out.print("> ");
             String input = scanner.nextLine().trim();
