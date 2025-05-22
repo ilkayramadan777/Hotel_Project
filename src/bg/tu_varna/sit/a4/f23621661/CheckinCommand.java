@@ -3,30 +3,35 @@ package bg.tu_varna.sit.a4.f23621661;
 import java.time.LocalDate;
 
 /**
- * Класът {@code CheckinCommand} представлява команда за настаняване на гости в хотел.
- * Част е от реализацията на шаблона Command.
+ * Команда за настаняване на гости в хотелска стая за определен период.
+ * Ако не е подаден брой гости, се използва броят легла в стаята.
  */
 public class CheckinCommand implements Command {
 
     /**
-     * Обект от тип {@code Hotel}, към който ще се изпълни командата.
+     * Хотелът, в който се извършва настаняването.
      */
     private Hotel hotel;
 
     /**
-     * Конструктор за създаване на нова инстанция на {@code CheckinCommand}.
+     * Създава нова команда за настаняване.
      *
-     * @param hotel обект от тип {@code Hotel}, към който се отнася командата
+     * @param hotel хотелският обект, към който се прилага командата
      */
     public CheckinCommand(Hotel hotel) {
         this.hotel = hotel;
     }
 
     /**
-     * Изпълнява командата за настаняване в хотел.
-     * Ако не е подаден брой гости, се използва стойност по подразбиране 1.
+     * Изпълнява настаняване на гости в стая.
+     * Валидира номера на стаята и броя на гостите спрямо капацитета ѝ.
      *
-     * @param args масив от аргументи, подадени от потребителя
+     * @param args масив от аргументи:
+     *             args[1] – номер на стая,
+     *             args[2] – начална дата,
+     *             args[3] – крайна дата,
+     *             args[4] – бележка,
+     *             args[5] – брой гости (по избор)
      */
     @Override
     public void execute(String[] args) {
@@ -39,7 +44,24 @@ public class CheckinCommand implements Command {
         LocalDate from = DateUtils.parse(args[2]);
         LocalDate to = DateUtils.parse(args[3]);
         String note = args[4];
-        int guests = args.length >= 6 ? Integer.parseInt(args[5]) : 1;
+
+        if (!hotel.roomExists(room)) {
+            System.out.println("Грешка: Стая с номер " + room + " не съществува.");
+            return;
+        }
+
+        int roomBeds = hotel.getRoomBeds(room);
+        int guests;
+
+        if (args.length >= 6) {
+            guests = Integer.parseInt(args[5]);
+            if (guests > roomBeds) {
+                System.out.println("Грешка: Стая " + room + " има само " + roomBeds + " легла. Изберете друга стая или намалете броя на гостите.");
+                return;
+            }
+        } else {
+            guests = roomBeds;
+        }
 
         hotel.checkin(room, from, to, note, guests);
     }

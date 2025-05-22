@@ -63,6 +63,15 @@ public class CommandExecutor {
         String cmd = args[0].toLowerCase();
         Command action = commandMap.get(cmd);
 
+
+        if (!fileManager.isFileOpened() &&
+                !cmd.equals("open") &&
+                !cmd.equals("exit") &&
+                !cmd.equals("help")) {
+            System.out.println("Грешка: Моля първо отворете файл с командата 'open'.");
+            return;
+        }
+
         if (action != null) {
             try {
                 action.execute(args);

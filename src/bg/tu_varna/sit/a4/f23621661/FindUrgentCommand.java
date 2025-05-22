@@ -9,16 +9,8 @@ import java.time.LocalDate;
  */
 public class FindUrgentCommand implements Command {
 
-    /**
-     * Обект от тип {@code Hotel}, в който ще се търсят стаи.
-     */
     private Hotel hotel;
 
-    /**
-     * Конструктор за създаване на нова команда {@code FindUrgentCommand}.
-     *
-     * @param hotel обект от тип {@code Hotel}, към който се отнася търсенето
-     */
     public FindUrgentCommand(Hotel hotel) {
         this.hotel = hotel;
     }
@@ -26,9 +18,10 @@ public class FindUrgentCommand implements Command {
     /**
      * Изпълнява командата за спешно търсене на свободна стая.
      * Ако няма подходяща стая, дори и при пренареждане, се извежда съобщение.
+     *
      * @param args масив от аргументи, където:
      *             {@code args[1]} е брой легла (цяло положително число),
-     *             {@code args[2]} и {@code args[3]} са дати във формат {@code yyyy-MM-dd}
+     *             {@code args[2]} и {@code args[3]} са дати във формат yyyy-MM-dd
      */
     @Override
     public void execute(String[] args) {
@@ -40,7 +33,7 @@ public class FindUrgentCommand implements Command {
         try {
             int beds = Integer.parseInt(args[1]);
             if (beds <= 0) {
-                System.out.println("Броят на леглата трябва да е положително число.");
+                System.out.println("Грешка: Броят на леглата трябва да е положително число.");
                 return;
             }
 
@@ -48,11 +41,11 @@ public class FindUrgentCommand implements Command {
             LocalDate to = DateUtils.parse(args[3]);
 
             hotel.findUrgent(beds, from, to).ifPresentOrElse(
-                    r -> System.out.println("Спешно намерена стая (с пренареждане): " + r),
-                    () -> System.out.println("Няма налична стая дори със спешно пренареждане.")
+                    room -> System.out.println("Спешно намерена свободна стая чрез пренареждане: " + room),
+                    () -> System.out.println("Няма подходяща стая, дори със спешно пренареждане.")
             );
         } catch (Exception e) {
-            System.out.println("Грешни входни данни. Уверете се, че датите са във формат yyyy-MM-dd и броят легла е число.");
+            System.out.println("Грешни входни данни. Уверете се, че датите са във формат yyyy-MM-dd и броят легла е цяло число.");
         }
     }
 }

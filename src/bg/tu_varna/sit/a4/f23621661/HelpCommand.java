@@ -34,6 +34,5 @@ public class HelpCommand implements Command {
         commandMap.keySet().stream()
                 .sorted()
                 .forEach(cmd -> System.out.println(" - " + cmd));
-        System.out.println(" - exit");
     }
 }

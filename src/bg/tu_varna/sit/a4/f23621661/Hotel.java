@@ -218,12 +218,6 @@ public class Hotel {
         return rooms.stream().anyMatch(r -> r.getNumber() == roomNumber);
     }
 
-    /**
-     * Връща броя на леглата в дадена стая.
-     *
-     * @param roomNumber номер на стаята
-     * @return брой легла или 0, ако стаята не съществува
-     */
     public int getRoomBeds(int roomNumber) {
         return rooms.stream()
                 .filter(r -> r.getNumber() == roomNumber)
@@ -231,4 +225,5 @@ public class Hotel {
                 .findFirst()
                 .orElse(0);
     }
+
 }

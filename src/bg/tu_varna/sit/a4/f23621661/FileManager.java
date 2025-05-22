@@ -16,16 +16,29 @@ public class FileManager {
 
     /**
      * Зарежда данни от подаден файл и инициализира хотелските стаи и резервации.
+     * Ако файлът не съществува, създава нов празен файл.
      *
      * @param hotel    хотелският обект, в който се зареждат данните
-     * @param filename името на файла за четене
-     * @throws IOException ако файлът не може да бъде прочетен
+     * @param filename името на файла за четене или създаване
+     * @throws IOException ако файлът не може да бъде прочетен или създаден
      */
     public void open(Hotel hotel, String filename) throws IOException {
         hotel.getRooms().clear();
         hotel.getReservations().clear();
 
-        try (BufferedReader reader = new BufferedReader(new FileReader(filename))) {
+        File file = new File(filename);
+
+        if (!file.exists()) {
+            if (file.createNewFile()) {
+                currentFile = filename;
+                System.out.println("Създаден нов празен файл: '" + filename + "'");
+                return;
+            } else {
+                throw new IOException("Неуспешно създаване на файл: '" + filename + "'");
+            }
+        }
+
+        try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
             String line;
             boolean inRooms = false;
             boolean inReservations = false;
@@ -118,5 +131,13 @@ public class FileManager {
         hotel.getReservations().clear();
         currentFile = null;
         System.out.println("Данните за хотела са затворени.");
+    }
+
+    /**
+     * Проверява дали има зареден файл.
+     * @return true ако има отворен файл, false в противен случай
+     */
+    public boolean isFileOpened() {
+        return currentFile != null;
     }
 }
