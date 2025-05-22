@@ -5,35 +5,35 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Класът {@code CommandExecutor} отговаря за регистриране и изпълнение на команди чрез {@code HashMap}.
- * Реализира централизиран механизъм за обработка на всички потребителски команди чрез шаблона Command.
+ * Отговаря за регистриране и изпълнение на всички команди в приложението.
+ * Използва шаблона Command с помощта на хеш-таблица за бърз достъп.
  */
 public class CommandExecutor {
 
     /**
-     * Инстанция на {@code Hotel}, използвана от всички команди.
+     * Хотелът, с който работят командите.
      */
     private final Hotel hotel = new Hotel();
 
     /**
-     * Мениджър за работа с файлове.
+     * Мениджър за файлови операции.
      */
     private final FileManager fileManager = new FileManager();
 
     /**
-     * Хеш-таблица, която съхранява командите по име.
+     * Таблица с всички налични команди по име.
      */
     private final Map<String, Command> commandMap = new HashMap<>();
 
     /**
-     * Конструктор, който инициализира и регистрира всички налични команди.
+     * Създава нов изпълнител и регистрира всички команди.
      */
     public CommandExecutor() {
         registerCommands();
     }
 
     /**
-     * Регистрира всички поддържани команди в {@code commandMap}.
+     * Регистрира всички команди в системата.
      */
     private void registerCommands() {
         commandMap.put("open", new OpenCommand(hotel, fileManager));
@@ -52,17 +52,15 @@ public class CommandExecutor {
     }
 
     /**
-     * Изпълнява команда въз основа на потребителски вход.
-     * Разделя входния текст по интервали и извиква съответната команда, ако е регистрирана.
-     * В противен случай показва съобщение за грешка.
+     * Изпълнява подадена команда.
+     * Ако не е зареден файл, се позволяват само "open", "help" и "exit".
      *
-     * @param input входен низ, съдържащ името на командата и аргументи
+     * @param input въведената от потребителя команда с аргументи
      */
     public void execute(String input) {
         String[] args = input.split("\\s+");
         String cmd = args[0].toLowerCase();
         Command action = commandMap.get(cmd);
-
 
         if (!fileManager.isFileOpened() &&
                 !cmd.equals("open") &&

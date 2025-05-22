@@ -4,8 +4,8 @@ import java.io.*;
 import java.time.LocalDate;
 
 /**
- * Клас {@code FileManager} отговаря за зареждане, запазване и затваряне на данните на хотел
- * от/във текстов файл. Използва се за сериализация на стаи и резервации.
+ * Отговаря за зареждане, запис и затваряне на хотелски данни от/в текстов файл.
+ * Използва се за управление на стаи и резервации.
  */
 public class FileManager {
 
@@ -15,12 +15,12 @@ public class FileManager {
     private String currentFile;
 
     /**
-     * Зарежда данни от подаден файл и инициализира хотелските стаи и резервации.
+     * Зарежда данни от файл и инициализира стаи и резервации.
      * Ако файлът не съществува, създава нов празен файл.
      *
-     * @param hotel    хотелският обект, в който се зареждат данните
-     * @param filename името на файла за четене или създаване
-     * @throws IOException ако файлът не може да бъде прочетен или създаден
+     * @param hotel    хотелският обект, който ще бъде инициализиран
+     * @param filename име на файла за зареждане или създаване
+     * @throws IOException при проблем с четенето или създаването
      */
     public void open(Hotel hotel, String filename) throws IOException {
         hotel.getRooms().clear();
@@ -80,11 +80,10 @@ public class FileManager {
     }
 
     /**
-     * Запазва хотелските данни във вече отворения файл.
+     * Записва данните във вече отворения файл.
      *
-     * @param hotel обектът {@code Hotel}, чиито данни се записват
-     * @throws IOException               при грешка при запис
-     * @throws IllegalStateException    ако няма отворен файл
+     * @param hotel хотелът, чиито данни ще се запишат
+     * @throws IOException ако възникне грешка при запис
      */
     public void save(Hotel hotel) throws IOException {
         if (currentFile == null)
@@ -93,11 +92,11 @@ public class FileManager {
     }
 
     /**
-     * Запазва хотелските данни в нов файл.
+     * Записва данните в нов файл.
      *
-     * @param hotel    обектът {@code Hotel}, чиито данни се записват
-     * @param filename име на файла за запис
-     * @throws IOException при грешка при запис
+     * @param hotel    хотелът, чиито данни ще се запишат
+     * @param filename име на новия файл
+     * @throws IOException при проблем с писането
      */
     public void saveAs(Hotel hotel, String filename) throws IOException {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(filename))) {
@@ -122,9 +121,9 @@ public class FileManager {
     }
 
     /**
-     * Затваря текущо заредените данни и нулира текущия файл.
+     * Затваря текущите данни и нулира информацията за файла.
      *
-     * @param hotel обектът {@code Hotel}, чиито данни се изчистват
+     * @param hotel хотелът, чийто данни ще се изчистят
      */
     public void close(Hotel hotel) {
         hotel.getRooms().clear();
@@ -134,8 +133,9 @@ public class FileManager {
     }
 
     /**
-     * Проверява дали има зареден файл.
-     * @return true ако има отворен файл, false в противен случай
+     * Проверява дали има отворен файл.
+     *
+     * @return true ако има активен файл, иначе false
      */
     public boolean isFileOpened() {
         return currentFile != null;

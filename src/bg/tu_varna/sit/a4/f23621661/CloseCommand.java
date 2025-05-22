@@ -1,13 +1,12 @@
 package bg.tu_varna.sit.a4.f23621661;
 
 /**
- * Класът {@code CloseCommand} представлява команда за затваряне на текущо заредения файл с хотелски данни.
- * Част е от реализацията на шаблона Command.
+ * Команда за затваряне на текущо заредения файл с хотелски данни.
  */
 public class CloseCommand implements Command {
 
     /**
-     * Хотелът, с който се работи.
+     * Хотелът, чийто данни ще се затворят.
      */
     private Hotel hotel;
 
@@ -17,10 +16,10 @@ public class CloseCommand implements Command {
     private FileManager fileManager;
 
     /**
-     * Конструктор за създаване на нова команда {@code CloseCommand}.
+     * Създава нова команда за затваряне на файл.
      *
-     * @param hotel       обект от тип {@code Hotel}, свързан с текущия файл
-     * @param fileManager обект от тип {@code FileManager}, който управлява файловите операции
+     * @param hotel       обектът на хотела, чийто данни се обработват
+     * @param fileManager обект за управление на файлови операции
      */
     public CloseCommand(Hotel hotel, FileManager fileManager) {
         this.hotel = hotel;
@@ -28,10 +27,9 @@ public class CloseCommand implements Command {
     }
 
     /**
-     * Изпълнява командата за затваряне на файла, асоцииран с {@code hotel}.
-     * Използва {@code FileManager} за затваряне и изписва потвърждение.
+     * Изпълнява операцията по затваряне на файла.
      *
-     * @param args масив от аргументи (не се използват при тази команда)
+     * @param args аргументи (не се използват)
      */
     @Override
     public void execute(String[] args) {
