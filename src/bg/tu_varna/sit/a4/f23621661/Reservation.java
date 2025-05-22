@@ -3,9 +3,8 @@ package bg.tu_varna.sit.a4.f23621661;
 import java.time.LocalDate;
 
 /**
- * Класът {@code Reservation} представлява резервация за хотелска стая.
- * Съдържа информация за номер на стая, период на престой, бележка, брой гости
- * и дали резервацията е за недостъпност (например при ремонт).
+ * Представлява резервация за хотелска стая.
+ * Съдържа информация за период, гости, бележка и дали е недостъпност.
  */
 public class Reservation {
 
@@ -17,14 +16,14 @@ public class Reservation {
     private final boolean isUnavailable;
 
     /**
-     * Конструктор за създаване на нова резервация.
+     * Създава нова резервация или маркира стая като недостъпна.
      *
-     * @param roomNumber     номер на стаята
-     * @param from           начална дата на престоя
-     * @param to             крайна дата на престоя
-     * @param note           бележка към резервацията
-     * @param guests         брой гости
-     * @param isUnavailable  дали стаята е недостъпна (true – недостъпна; false – реална резервация)
+     * @param roomNumber    номер на стаята
+     * @param from          начална дата
+     * @param to            крайна дата
+     * @param note          бележка
+     * @param guests        брой гости
+     * @param isUnavailable дали стаята е временно недостъпна
      */
     public Reservation(int roomNumber, LocalDate from, LocalDate to, String note, int guests, boolean isUnavailable) {
         this.roomNumber = roomNumber;
@@ -35,64 +34,34 @@ public class Reservation {
         this.isUnavailable = isUnavailable;
     }
 
-    /**
-     * Връща номера на стаята.
-     *
-     * @return номер на стаята
-     */
     public int getRoomNumber() {
         return roomNumber;
     }
 
-    /**
-     * Връща началната дата на резервацията.
-     *
-     * @return начална дата
-     */
     public LocalDate getFrom() {
         return from;
     }
 
-    /**
-     * Връща крайната дата на резервацията.
-     *
-     * @return крайна дата
-     */
     public LocalDate getTo() {
         return to;
     }
 
-    /**
-     * Връща бележката към резервацията.
-     *
-     * @return бележка
-     */
     public String getNote() {
         return note;
     }
 
-    /**
-     * Връща броя на гостите.
-     *
-     * @return брой гости
-     */
     public int getGuests() {
         return guests;
     }
 
-    /**
-     * Проверява дали стаята е маркирана като временно недостъпна.
-     *
-     * @return {@code true}, ако е недостъпна; {@code false} ако е стандартна резервация
-     */
     public boolean isUnavailable() {
         return isUnavailable;
     }
 
     /**
-     * Връща текстово представяне на резервацията.
+     * Връща текстово описание на резервацията.
      *
-     * @return низ с основна информация за резервацията
+     * @return низ с основна информация
      */
     @Override
     public String toString() {

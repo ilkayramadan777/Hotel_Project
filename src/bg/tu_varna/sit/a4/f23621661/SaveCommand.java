@@ -3,27 +3,19 @@ package bg.tu_varna.sit.a4.f23621661;
 import java.io.IOException;
 
 /**
- * Класът {@code SaveCommand} представлява команда за запазване на текущите
- * хотелски данни във вече отворения файл.
- * Част е от реализацията на шаблона Command.
+ * Команда за запазване на текущите хотелски данни
+ * във вече отворения файл.
  */
 public class SaveCommand implements Command {
 
-    /**
-     * Хотелският обект, чиито данни ще се запазват.
-     */
     private final Hotel hotel;
-
-    /**
-     * Мениджър за файлови операции.
-     */
     private final FileManager fileManager;
 
     /**
-     * Конструктор за създаване на команда {@code SaveCommand}.
+     * Създава нова команда за стандартно запазване.
      *
-     * @param hotel       обект от тип {@code Hotel}, с текущите данни
-     * @param fileManager обект от тип {@code FileManager}, който извършва запис във файл
+     * @param hotel       хотелският обект
+     * @param fileManager мениджър за работа с файлове
      */
     public SaveCommand(Hotel hotel, FileManager fileManager) {
         this.hotel = hotel;
@@ -31,10 +23,10 @@ public class SaveCommand implements Command {
     }
 
     /**
-     * Изпълнява командата за запис във вече отворения файл.
-     * Ако няма отворен файл, {@code FileManager} ще хвърли изключение.
+     * Изпълнява запис на данните във вече отворения файл.
+     * При липса на отворен файл се извежда съобщение за грешка.
      *
-     * @param args масив от аргументи (не се използват за тази команда)
+     * @param args аргументи (не се използват)
      */
     @Override
     public void execute(String[] args) {

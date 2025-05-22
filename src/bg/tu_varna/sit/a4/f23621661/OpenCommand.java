@@ -3,14 +3,13 @@ package bg.tu_varna.sit.a4.f23621661;
 import java.io.IOException;
 
 /**
- * Класът {@code OpenCommand} представлява команда за отваряне на файл,
- * съдържащ информация за хотелски стаи и резервации.
- * Част е от реализацията на шаблона Command.
+ * Команда за отваряне на файл с информация за хотел.
+ * Зарежда стаи и резервации в обекта на хотела.
  */
 public class OpenCommand implements Command {
 
     /**
-     * Обект от тип {@code Hotel}, който ще се инициализира с данни от файла.
+     * Хотелът, в който ще се зареждат данните.
      */
     private final Hotel hotel;
 
@@ -20,10 +19,10 @@ public class OpenCommand implements Command {
     private final FileManager fileManager;
 
     /**
-     * Конструктор за създаване на команда {@code OpenCommand}.
+     * Създава нова команда за отваряне на файл.
      *
-     * @param hotel       обект от тип {@code Hotel}, в който ще се заредят данните
-     * @param fileManager обект от тип {@code FileManager}, който управлява отварянето на файла
+     * @param hotel       хотелският обект
+     * @param fileManager мениджър за работа с файлове
      */
     public OpenCommand(Hotel hotel, FileManager fileManager) {
         this.hotel = hotel;
@@ -31,9 +30,10 @@ public class OpenCommand implements Command {
     }
 
     /**
-     * Изпълнява командата за отваряне на файл.
-     * Ако файлът не съществува или възникне грешка, се извежда съобщение.
-     * @param args масив от аргументи, където {@code args[1]} трябва да е пътят до файла
+     * Изпълнява зареждане на файл.
+     * Ако няма подадено име или има грешка при четене – извежда съобщение.
+     *
+     * @param args аргументи: args[1] – име или път на файла
      */
     @Override
     public void execute(String[] args) {

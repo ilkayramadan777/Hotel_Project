@@ -3,26 +3,19 @@ package bg.tu_varna.sit.a4.f23621661;
 import java.io.IOException;
 
 /**
- * Класът {@code SaveAsCommand} представлява команда за запазване на текущите
- * хотелски данни в нов файл. Част е от реализацията на шаблона Command.
+ * Команда за запазване на данните в нов файл.
+ * Записва текущото състояние на хотела в зададен път.
  */
 public class SaveAsCommand implements Command {
 
-    /**
-     * Обект от тип {@code Hotel}, чиито данни ще се записват.
-     */
     private final Hotel hotel;
-
-    /**
-     * Мениджър за работа с файлове.
-     */
     private final FileManager fileManager;
 
     /**
-     * Конструктор за създаване на команда {@code SaveAsCommand}.
+     * Създава нова команда за запис в нов файл.
      *
-     * @param hotel       хотелът, чиито данни се записват
-     * @param fileManager файлов мениджър, който извършва записа
+     * @param hotel       хотелският обект
+     * @param fileManager мениджър за работа с файлове
      */
     public SaveAsCommand(Hotel hotel, FileManager fileManager) {
         this.hotel = hotel;
@@ -30,9 +23,9 @@ public class SaveAsCommand implements Command {
     }
 
     /**
-     * Изпълнява командата за запис на данните в нов файл.
-     * При грешка при записване извежда съответно съобщение.
-     * @param args масив от аргументи, където {@code args[1]} съдържа името на новия файл
+     * Изпълнява запис на данните в нов файл.
+     *
+     * @param args аргументи: args[1] – име на файла
      */
     @Override
     public void execute(String[] args) {
